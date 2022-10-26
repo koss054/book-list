@@ -77,5 +77,35 @@
             var model = new RegisterViewModel();
             return View(model);
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = new User()
+            {
+                UserName = model.UserName,
+                Email = model.Email
+            };
+
+            var result = await userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction(nameof(Login));
+            }
+
+            foreach (var item in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, item.Description);
+            }
+
+            return View(model);
+        }
     }
 }
