@@ -2,9 +2,12 @@
 {
     using System.ComponentModel.DataAnnotations;
 
+    using static Constants.DataConstants.User;
+
     public class LoginViewModel
     {
         [Required]
+        [Display(Name = UserNameDisplay)]
         public string UserName { get; set; } = null!;
 
         [Required]
