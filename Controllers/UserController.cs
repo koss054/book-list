@@ -64,5 +64,18 @@
             ModelState.AddModelError(string.Empty, ErrorMessages.InvalidUserDetails);
             return View(model);
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Register()
+        {
+            if (User?.Identity?.IsAuthenticated ?? false)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var model = new RegisterViewModel();
+            return View(model);
+        }
     }
 }
