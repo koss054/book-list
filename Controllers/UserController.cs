@@ -19,7 +19,6 @@
             userManager = _userManager;
         }
 
-        [AllowAnonymous]
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
