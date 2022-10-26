@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Mvc;
 
     using Data.Entities;
+    using Models;
 
     public class UserController : BaseController
     {
@@ -23,6 +24,19 @@
         {
             await signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Login()
+        {
+            if (User?.Identity?.IsAuthenticated ?? false)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var model = new LoginViewModel();
+            return View(model);
         }
     }
 }
