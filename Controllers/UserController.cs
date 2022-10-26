@@ -1,12 +1,29 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace BookList.Controllers
+﻿namespace BookList.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+
+    using Data.Entities;
+
     public class UserController : BaseController
     {
-        public IActionResult Index()
+        private readonly SignInManager<User> signInManager;
+        private readonly UserManager<User> userManager;
+
+        public UserController(
+            SignInManager<User> _signInManager,
+            UserManager<User> _userManager)
         {
-            return View();
+            signInManager = _signInManager;
+            userManager = _userManager;
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
     }
 }
