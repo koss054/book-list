@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Mvc;
 
     using Data.Entities;
+    using Constants;
     using Models;
 
     public class UserController : BaseController
@@ -36,6 +37,31 @@
             }
 
             var model = new LoginViewModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await userManager.FindByNameAsync(model.UserName);
+
+            if (user != null)
+            {
+                var result = await signInManager.PasswordSignInAsync(user, model.Password, false, false);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+
+            ModelState.AddModelError(string.Empty, ErrorMessages.InvalidUserDetails);
             return View(model);
         }
     }
