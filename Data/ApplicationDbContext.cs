@@ -7,7 +7,7 @@
 
     using static Constants.DataConstants.User;
 
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<User>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -31,5 +31,9 @@
 
             base.OnModelCreating(builder);
         }
+
+        public DbSet<Book> Books { get; set; }
+
+        public DbSet<Genre> Genres { get; set; }
     }
 }
